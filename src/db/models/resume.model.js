@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				defaultValue: 'pending',
 			},
+			job_title: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
+			job_description: {
+				type: DataTypes.TEXT,
+				allowNull: true,
+			},
 			created_date_time: {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
