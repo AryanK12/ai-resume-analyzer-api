@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.TEXT,
 				allowNull: true,
 			},
+			extracted_text: {
+				type: DataTypes.TEXT,
+				allowNull: true,
+			},
 			created_date_time: {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
