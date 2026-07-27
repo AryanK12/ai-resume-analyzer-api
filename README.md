@@ -22,20 +22,26 @@ A backend REST API that analyzes resumes using AI, providing ATS-compatibility s
 
 ## Project Structure
 
+```text
 src/
-|--config/ # Environment variables and configuration
-|--controllers/ # Route controllers
-|--db/
-|--config/ # Database CLI configuration
-|--migrations/ # Database migrations
-|--models/ # Sequelize models
-|--middlewares/ # Custom Express middlewares (auth, validation, file upload)
-|--routes/ # API routes
-|--services/ # Business logic (service layer)
-|--utils/ # Utility classes and functions
-|--validations/ # Request validation schemas
-|--app.js # Express app
-|--index.js # App entry point
+├── config/             # Environment variables, JWT, AI, and application configuration
+├── controllers/        # Handle HTTP requests and responses
+│   ├── auth.controller.js
+│   ├── resume.controller.js
+│   └── user.controller.js
+├── db/
+│   ├── config/         # Sequelize configuration
+│   ├── migrations/     # Database migrations
+│   └── models/         # Sequelize models (User, Resume, ResumeFeedback)
+├── middlewares/        # Authentication, validation, file upload, and error handling
+├── routes/             # API route definitions
+│   └── v1/
+├── services/           # Business logic (resume analysis, AI integration, authentication)
+├── utils/              # Helper functions and utilities
+├── validations/        # Joi request validation schemas
+├── app.js              # Express application configuration
+└── index.js            # Application entry point
+```
 
 ## API Endpoints
 
