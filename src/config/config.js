@@ -41,6 +41,7 @@ const envVarsSchema = Joi.object()
 		SQL_IDLE: Joi.number()
 			.default(10000)
 			.description('sqldb max pool idle time in miliseconds'),
+		GEMINI_API_KEY: Joi.string().description('Google Gemini API key'),
 
 		SMTP_HOST: Joi.string().description('server that will send the emails'),
 		SMTP_PORT: Joi.number().description(
@@ -63,6 +64,9 @@ if (error) {
 }
 
 module.exports = {
+	gemini: {
+		apiKey: envVars.GEMINI_API_KEY,
+	},
 	env: envVars.NODE_ENV,
 	port: envVars.PORT,
 	pagination: {
@@ -90,14 +94,8 @@ module.exports = {
 			idle: envVars.SQL_IDLE,
 		},
 		define: {
-			/**
-			 * All tables won't have "createdAt" and "updatedAt" Auto fields.
-			 * References: https://sequelize.org/master/manual/model-basics.html#timestamps
-			 */
 			timestamps: false,
-			// Table names won't be pluralized.
 			freezeTableName: true,
-			// Column names will be underscored.
 			underscored: true,
 		},
 	},

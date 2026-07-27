@@ -1,6 +1,7 @@
 const fs = require('fs');
 const pdfParse = require('pdf-parse');
 const httpStatus = require('http-status');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { getOffset } = require('../utils/query');
 const ApiError = require('../utils/ApiError');
 const config = require('../config/config.js');
@@ -85,9 +86,83 @@ async function deleteResumeById(resumeId, userId) {
 	return true;
 }
 
+async function analyzeResume(resumeId, userId) {
+	const resume = await db.resume.findOne({
+		where: { id: resumeId, user_id: userId },
+	});
+
+	if (!resume) {
+		throw new ApiError(httpStatus.NOT_FOUND, 'Resume not found');
+	}
+
+	if (!resume.extracted_text) {
+		throw new ApiError(httpStatus.BAD_REQUEST, 'No extracted text available for this resume');
+	}
+
+	const genAI = new GoogleGenerativeAI(config.gemini.apiKey);
+	const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash-lite' });
+
+	const prompt = `You are an ATS (Applicant Tracking System) resume analyzer. Analyze the following resume text and return ONLY a valid JSON object with no markdown formatting, no code blocks, and no extra text — just the raw JSON.
+
+The JSON must have exactly this structure:
+{
+  "ats_score": <number 0-100>,
+  "tone_score": <number 0-100>,
+  "content_score": <number 0-100>,
+  "structure_score": <number 0-100>,
+  "skills_score": <number 0-100>,
+  "overall_score": <number 0-100>,
+  "tips": [
+    { "category": "string", "message": "string", "severity": "low|medium|high" }
+  ]
+}
+
+${resume.job_title ? `Target job title: ${resume.job_title}` : ''}
+${resume.job_description ? `Job description: ${resume.job_description}` : ''}
+
+Resume text:
+${resume.extracted_text}`;
+
+	let rawResponseText;
+	try {
+		const result = await model.generateContent(prompt);
+		rawResponseText = result.response.text();
+	} catch (error) {
+		console.error('Gemini API error:', error.message);
+		throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'LLM request failed');
+	}
+
+	let parsedFeedback;
+	try {
+		const cleanedText = rawResponseText.replace(/```json\n?|```\n?/g, '').trim();
+		parsedFeedback = JSON.parse(cleanedText);
+	} catch (error) {
+		throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to parse LLM response as JSON');
+	}
+
+	const feedback = await db.resume_feedback
+		.create({
+			resume_id: resume.id,
+			ats_score: parsedFeedback.ats_score,
+			tone_score: parsedFeedback.tone_score,
+			content_score: parsedFeedback.content_score,
+			structure_score: parsedFeedback.structure_score,
+			skills_score: parsedFeedback.skills_score,
+			overall_score: parsedFeedback.overall_score,
+			tips: parsedFeedback.tips,
+			raw_llm_response: parsedFeedback,
+		})
+		.then((resultEntity) => resultEntity.get({ plain: true }));
+
+	await db.resume.update({ status: 'completed' }, { where: { id: resume.id } });
+
+	return feedback;
+}
+
 module.exports = {
 	createResume,
 	getResumeById,
 	getResumes,
 	deleteResumeById,
+	analyzeResume,
 };

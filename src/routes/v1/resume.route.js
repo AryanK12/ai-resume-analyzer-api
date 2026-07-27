@@ -20,4 +20,8 @@ router
 	.get(validate(resumeValidation.getResume), resumeController.getResume)
 	.delete(validate(resumeValidation.deleteResume), resumeController.deleteResume);
 
+router
+	.route('/:resumeId/analyze')
+	.post(validate(resumeValidation.analyzeResume), resumeController.analyzeResume);
+
 module.exports = router;

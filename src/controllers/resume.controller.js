@@ -29,9 +29,15 @@ const deleteResume = catchAsync(async (req, res) => {
 	res.send({ success: true });
 });
 
+const analyzeResume = catchAsync(async (req, res) => {
+	const feedback = await resumeService.analyzeResume(req.params.resumeId, req.user.userId);
+	res.send({ feedback });
+});
+
 module.exports = {
 	uploadResume,
 	getResumes,
 	getResume,
 	deleteResume,
+	analyzeResume,
 };
