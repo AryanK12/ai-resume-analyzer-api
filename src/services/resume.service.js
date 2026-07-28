@@ -35,7 +35,17 @@ async function createResume(userId, file, body) {
 		})
 		.then((resultEntity) => resultEntity.get({ plain: true }));
 
-	return resume;
+	if (!extractedText) {
+		return { resume, feedback: null };
+	}
+
+	try {
+		const feedback = await analyzeResume(resume.id, userId);
+		return { resume: { ...resume, status: 'completed' }, feedback };
+	} catch (error) {
+		console.error('Auto-analysis failed:', error.message);
+		return { resume, feedback: null };
+	}
 }
 
 async function getResumeById(resumeId, userId) {

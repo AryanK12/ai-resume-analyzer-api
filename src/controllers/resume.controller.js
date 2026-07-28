@@ -7,8 +7,8 @@ const uploadResume = catchAsync(async (req, res) => {
 	if (!req.file) {
 		throw new ApiError(httpStatus.BAD_REQUEST, 'No file uploaded');
 	}
-	const resume = await resumeService.createResume(req.user.userId, req.file, req.body);
-	res.status(httpStatus.CREATED).send({ resume });
+	const { resume, feedback } = await resumeService.createResume(req.user.userId, req.file, req.body);
+	res.status(httpStatus.CREATED).send({ resume, feedback });
 });
 
 const getResumes = catchAsync(async (req, res) => {

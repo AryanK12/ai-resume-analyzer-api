@@ -54,8 +54,10 @@ module.exports = router;
  *                 format: binary
  *               jobTitle:
  *                 type: string
+ *                 example: Backend Developer
  *               jobDescription:
  *                 type: string
+ *                 example: Looking for an engineer experienced in Node.js, PostgreSQL, and REST API design.
  *     responses:
  *       "201":
  *         description: Created
