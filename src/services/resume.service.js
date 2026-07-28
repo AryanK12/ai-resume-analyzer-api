@@ -112,10 +112,17 @@ The JSON must have exactly this structure:
   "structure_score": <number 0-100>,
   "skills_score": <number 0-100>,
   "overall_score": <number 0-100>,
+  "skills_found": ["skill1", "skill2"],
+  "missing_skills": ["skill1", "skill2"],
+  "strengths": ["strength1", "strength2"],
+  "weaknesses": ["weakness1", "weakness2"],
+  "suggestions": ["suggestion1", "suggestion2"],
   "tips": [
     { "category": "string", "message": "string", "severity": "low|medium|high" }
   ]
 }
+
+Base "missing_skills" on comparing the resume against the target job title/description if provided, otherwise infer likely relevant skills for the candidate's apparent field.
 
 ${resume.job_title ? `Target job title: ${resume.job_title}` : ''}
 ${resume.job_description ? `Job description: ${resume.job_description}` : ''}
@@ -150,6 +157,11 @@ ${resume.extracted_text}`;
 			skills_score: parsedFeedback.skills_score,
 			overall_score: parsedFeedback.overall_score,
 			tips: parsedFeedback.tips,
+			skills_found: parsedFeedback.skills_found,
+			missing_skills: parsedFeedback.missing_skills,
+			strengths: parsedFeedback.strengths,
+			weaknesses: parsedFeedback.weaknesses,
+			suggestions: parsedFeedback.suggestions,
 			raw_llm_response: parsedFeedback,
 		})
 		.then((resultEntity) => resultEntity.get({ plain: true }));

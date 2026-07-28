@@ -40,6 +40,26 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.JSONB,
 				allowNull: true,
 			},
+			skills_found: {
+				type: DataTypes.JSONB,
+				allowNull: true,
+			},
+			missing_skills: {
+				type: DataTypes.JSONB,
+				allowNull: true,
+			},
+			strengths: {
+				type: DataTypes.JSONB,
+				allowNull: true,
+			},
+			weaknesses: {
+				type: DataTypes.JSONB,
+				allowNull: true,
+			},
+			suggestions: {
+				type: DataTypes.JSONB,
+				allowNull: true,
+			},
 			raw_llm_response: {
 				type: DataTypes.JSONB,
 				allowNull: true,
