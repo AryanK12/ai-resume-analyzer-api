@@ -91,7 +91,7 @@ Once running, view the auto-generated Swagger docs at `http://localhost:3000/v1/
 
 ## About This Project
 
-This project is built on top of an open-source Node.js/Express/PostgreSQL boilerplate ([japananh/node-express-postgres-boilerplate](https://github.com/japananh/node-express-postgres-boilerplate)), which provided the initial authentication and role-based access control foundation. On top of that foundation, I designed and built:
+This project is built on top of an open-source Node.js/Express/PostgreSQL boilerplate, which provided the initial authentication and role-based access control foundation. On top of that foundation, I designed and built:
 
 - The `resume` and `resume_feedback` database schema and migrations
 - Resume upload handling with Multer
@@ -100,6 +100,31 @@ This project is built on top of an open-source Node.js/Express/PostgreSQL boiler
 - All resume-related services, controllers, routes, and validation
 - Ownership-based authorization for resume access
 
+## Roadmap
+
+- [ ] React frontend for resume upload and analysis
+- [ ] Resume-to-job-description matching
+- [ ] Downloadable ATS report (PDF)
+- [ ] Docker support
+- [ ] Cloud deployment
+
+## Acknowledgements
+
+This project was initially bootstrapped using the
+Node Express PostgreSQL Boilerplate by japananh.
+
+The project has been significantly extended with:
+
+- AI-powered resume analysis
+- Resume upload and management
+- Resume feedback generation
+- ATS scoring
+- PostgreSQL database models
+- Swagger API documentation
+- JWT authentication enhancements
+
 ## License
 
-To be updated
+This project is licensed under the MIT License.
+
+It is based on the Node Express PostgreSQL Boilerplate by japananh and has been extended with project-specific functionality for AI-powered resume analysis.
