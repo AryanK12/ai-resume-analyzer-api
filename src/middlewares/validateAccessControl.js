@@ -5,7 +5,6 @@ const ApiError = require('../utils/ApiError');
 function grantAccess(action, resource) {
 	return async (req, _res, next) => {
 		try {
-			// eslint-disable-next-line eqeqeq
 			const isOwnedUser = req.user.userId == req.params.userId;
 			const modifiedAction = isOwnedUser
 				? action.replace('Any', 'Own')
